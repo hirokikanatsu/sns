@@ -1,0 +1,62 @@
+#top_title{
+    font-size: 50px;
+    font-weight:bold;
+}
+
+.head_wrapper{
+    width:100%;
+    background-color: darkkhaki;
+    position: fixed;
+    top:0;
+    background-image: url('../img/topImage.jpg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+}
+
+#top_wrapper{
+    width:100%;
+    height:1000px;
+    
+}
+
+#top_h1{
+    font-size: 100px;
+    font-weight: bold;
+    color:aqua;
+}
+
+#login_logo{
+    position: absolute;
+    top : 40px;
+    right: 80px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* pc以外の端末の場合 */
+
+@media (max-width: 767px) {
+    #top_title{
+        position: absolute;
+        left:80px;
+        font-size: 30px;
+        font-weight:bold;
+    }
+
+    #login_logo{
+        position: absolute;
+        top : 20px;
+        left: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    #top_h1{
+        width:100%;
+        font-size: 20px;
+        font-weight: bold;
+        color:aqua;
+    }
+
+}

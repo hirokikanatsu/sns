@@ -1,0 +1,109 @@
+ul {
+    list-style: none;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  img {
+    border: none;
+    vertical-align: bottom;
+    max-width: 100%;
+  }
+  
+  html {
+    font-size: 62.5%;
+  }
+  
+  body {
+    background: #fff;
+    color: #333;
+    font-size: 1.6rem;
+    font-family:"游ゴシック",YuGothic,"Hiragino Kaku Gothic ProN",Meiryo, sans-serif;
+  }
+
+.ml20{
+    margin-left: 20px;
+}
+
+.ml100{
+    margin-left: 100px;
+}
+
+.mt30{
+    margin-top: 30px;
+}
+
+.mt50{
+    margin-top: 50px;
+}
+
+.mt100{
+    margin-top: 100px;
+}
+
+.pt100{
+    padding-top: 100px;
+}
+
+.t_center{
+    text-align: center;
+}
+
+.wrapper{
+    justify-content: center;
+}
+
+.t_center{
+    text-align: center;
+}
+
+label{
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.form-controller {
+    width:350px;
+    height:30px;
+    margin-left:150px
+}
+
+.title_font{
+    font-size: 50px;
+    color: aquamarine;
+    font-weight: bold;
+}
+
+.button_font{
+    width:180px;
+    height:50px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.pass_font{
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.register_font{
+    font-size: 50px;
+    color: burlywood;
+}
+
+@media (max-width: 767px) {
+
+    label{
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .form-controller {
+        width:200px;
+        height:30px;
+    }
+
+}

@@ -1,6 +1,8 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +18,20 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/login',[LoginController::class,'login_top'])->name('login');
+
+
+
+Route::get('/timeline', 'Auth\TimelineController@showTimelinePage'); 
+Route::post('/timeline', 'TimelineController@postTweet');   
+
+
+
 

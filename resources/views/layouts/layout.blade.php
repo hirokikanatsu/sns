@@ -16,6 +16,10 @@
         <div>
             <img id='myicon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
             <img id='icon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
+            <form action="{{route('logout')}}" method='post'>
+                @csrf
+                <button id='logout'>ログアウト</button>
+            </form>
         </div>
 
     </div>

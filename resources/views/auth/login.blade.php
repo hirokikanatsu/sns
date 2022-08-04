@@ -8,7 +8,7 @@
                 <div class='title_font'>{{ __('Login') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('tweet_top') }}">
                         @csrf
 
                         <div class="mt50">

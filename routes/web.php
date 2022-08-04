@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\TimelineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,15 +23,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home', [TimelineController::class,'showTimelinePage'])->name('tweet_top');
+Route::get('/timeline',[TimelineController::class,'formTimeline'])->name('timeline');
+Route::post('/timeline', [TimelineController::class,'postTweet'])->name('form_timeline');   
 
 
 Route::get('/login',[LoginController::class,'login_top'])->name('login');
 
 
 
-Route::get('/timeline', 'Auth\TimelineController@showTimelinePage'); 
-Route::post('/timeline', 'TimelineController@postTweet');   
 
 
 

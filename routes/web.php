@@ -16,19 +16,29 @@ use App\Http\Controllers\Auth\TimelineController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 Auth::routes();
 
-Route::post('/home', [TimelineController::class,'showTimelinePage'])->name('tweet_top');
-Route::get('/timeline',[TimelineController::class,'formTimeline'])->name('timeline');
-Route::post('/timeline', [TimelineController::class,'postTweet'])->name('form_timeline');   
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
 
 
-Route::get('/login',[LoginController::class,'login_top'])->name('login');
+// Route::group(['middleware' => ['guest']],function(){
+    Route::get('/login',[LoginController::class,'login_top'])->name('login');
+    Route::post('/login_conf', [TimelineController::class,'loginConfirm'])->name('login_conf');
+// });
+
+ 
+
+Route::group(['middleware' => ['auth']],function(){
+    Route::post('/logout',[TimelineController::class,'logout'])->name('logout');
+    Route::get('/timeline',[TimelineController::class,'formTimeline'])->name('timeline');
+    Route::post('/timeline', [TimelineController::class,'postTweet'])->name('form_timeline');  
+});
+
 
 
 

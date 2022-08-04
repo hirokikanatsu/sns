@@ -6,22 +6,22 @@
         <div class="col-md-8">
             <div class="t_center">
                 <div class='title_font'>{{ __('Login') }}</div>
-
                 <div class="card-body">
-                    <form method="POST" action="{{ route('tweet_top') }}">
+                <!-- <x-alert type="danger" :session="session('login_error')"></x-alert> -->
+                    <form method="POST" action="{{ route('login_conf') }}">
                         @csrf
+
+                        @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <li class='font_red err_msg'>{{ $error }}</li>
+                            @endforeach
+                        @endif
 
                         <div class="mt50">
                             <label for="email" id='email'>{{ __('メールアドレス') }}</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-controller @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
                             </div>
                         </div>
 
@@ -30,12 +30,6 @@
 
                             <div class="col-md-6 t_center">
                                 <input id="password" type="password" class="form-controller @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
                             </div>
                         </div>
 

@@ -159,7 +159,9 @@ return [
     */
 
     'attributes' => [
-        'tweet' => 'ツイート'
+        'tweet' => 'ツイート',
+        'email' => 'メールアドレス',
+        'password'=>'パスワード',
     ],
 
 ];

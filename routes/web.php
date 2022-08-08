@@ -25,18 +25,42 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::post('/back_page',[TimelineController::class,'back_page'])->name('back_page');
+
 
 // Route::group(['middleware' => ['guest']],function(){
+
+    //ログイン画面へ遷移
     Route::get('/login',[LoginController::class,'login_top'])->name('login');
+
+    //ログイン
     Route::post('/login_conf', [TimelineController::class,'loginConfirm'])->name('login_conf');
 // });
 
  
 
 Route::group(['middleware' => ['auth']],function(){
+
+    //編集入力ページ
+    Route::post('/edit_conf/{id}',[TimelineController::class,'edit_conf'])->name('edit_conf');
+
+    //編集ページ
+    Route::get('/tweet_edit/{id}',[TimelineController::class,'tweet_edit'])->name('tweet_edit');
+
+    //マイページ
+    Route::get('/mypage',[TimelineController::class,'mypage'])->name('mypage');
+    
+    //ツイート詳細画面
+    Route::get('/tweet.detail/{id}',[TimelineController::class,'tweetDetail'])->name('tweet.detail');
+
+    //ログアウト
     Route::post('/logout',[TimelineController::class,'logout'])->name('logout');
+
+    //ツイート作成画面
     Route::get('/timeline',[TimelineController::class,'formTimeline'])->name('timeline');
-    Route::post('/timeline', [TimelineController::class,'postTweet'])->name('form_timeline');  
+
+    //ツイート作成
+    Route::post('/timeline', [TimelineController::class,'postTweet'])->name('form_timeline'); 
 });
 
 

@@ -16,6 +16,7 @@
         <div>
             <img id='myicon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
             <img id='icon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
+            <button id='mypage'><a href="{{route('mypage')}}">マイページ</a></button>
             <form action="{{route('logout')}}" method='post'>
                 @csrf
                 <button id='logout'>ログアウト</button>
@@ -25,9 +26,3 @@
     </div>
 
     @yield('content')
-
-
-    <div id='footer_wrapper' class="t_center"></div>
-    </body>
-</html>
-

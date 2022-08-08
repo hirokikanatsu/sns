@@ -59,7 +59,20 @@
     border-radius: 10px;
     cursor: pointer;
     position: absolute;
-    right: 0;
+    right: 2%;
+    top:100px;
+}
+
+#mypage{
+    width: 150px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    color:chartreuse;
+    border-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 12%;
     top:100px;
 }
 
@@ -98,6 +111,98 @@
     bottom:30px;
     right:30px;
 }
+
+#tweet_border{
+    width:100%;
+    margin:30px;
+    border-bottom: solid 1px; 
+}
+
+.tweet_area{
+    width:100%;
+    margin:50px 0;
+}
+
+
+.tweet_th{
+    position: relative;
+    left: 3em;
+    font-size: 20px;
+    line-height: 5;
+}
+
+.tweet_detailth{
+    position: relative;
+    left: 10em;
+    width:10em;
+    font-size: 30px;
+}
+
+.edit_btn{
+    position: relative;
+    left: 30em;
+    width: 100px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.delete_btn{
+    position: relative;
+    left: 35em;
+    width: 100px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 10px;
+    color: #2695E0;
+    cursor: pointer;
+}
+
+.back_btn{
+    position: absolute;
+    right: 50px;
+    width: 100px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 10px;
+    color:crimson;
+    cursor: pointer;
+}
+
+.tweet_td{
+    position: relative;
+    left: 10em;
+    font-size: 20px;
+}
+
+.tweet_detailtd{
+    position: relative;
+    left: 15em;
+    width:45em;
+    height:300px;
+    font-size: 20px;
+}
+
+.table_detail{
+    border: solid 1px; 
+    padding: 10px;
+    width:  300px;             
+    height: 80px;    
+}
+
+table {
+    border-collapse:  collapse; /* セルの線を重ねる */
+}
+
+/* .tweet_space{
+    width: 100%;
+    margin:50px 0 ;
+    background-color: antiquewhite;
+} */
 
 
 

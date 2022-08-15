@@ -3,8 +3,10 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
         <link href="{{ asset('css/style.css') }}" rel="stylesheet">
         <link href="{{ asset('css/base.css') }}" rel="stylesheet">
+        <script src="{{ mix('js/app.js') }}"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Laravel</title>
 
@@ -26,3 +28,5 @@
     </div>
 
     @yield('content')
+
+    <script src="{{ asset('/js/base.js') }}"></script>

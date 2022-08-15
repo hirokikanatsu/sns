@@ -41,6 +41,12 @@ Route::post('/back_page',[TimelineController::class,'back_page'])->name('back_pa
 
 Route::group(['middleware' => ['auth']],function(){
 
+    //いいね用Ajax
+    Route::post('good_ajax',[TimelineController::class,'good_ajax'])->name('good_ajax');
+
+    //ツイート削除
+    Route::get('/delete_tweet/{id}',[TimelineController::class,'delete_tweet'])->name('delete_tweet');
+
     //編集入力ページ
     Route::post('/edit_conf/{id}',[TimelineController::class,'edit_conf'])->name('edit_conf');
 

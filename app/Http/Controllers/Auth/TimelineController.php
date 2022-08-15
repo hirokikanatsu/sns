@@ -10,6 +10,7 @@ use App\Http\Requests\TweetRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\Tweet;
 use App\Models\User;
+use App\Models\Good;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Ui\Presets\React;
 
@@ -34,6 +35,16 @@ class TimelineController extends Controller
 
             $tweets = $this->tweet->with('user')->get()->toArray();
 
+            $good = new Good();
+            foreach($tweets as $key => $tweet){
+                $result = $good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
+                if($result){
+                    $tweets[$key]['good'] = true;
+                }else{
+                    $tweets[$key]['good'] = false;
+                }
+            }
+        
             return view('Auth.timeline',['tweets' => $tweets]);
         }
 
@@ -90,7 +101,14 @@ class TimelineController extends Controller
     */
     public function tweetDetail(int $tweet_id){
         $results = $this->tweet->with('user')->where('id','=',$tweet_id)->get()->toArray();
-        
+
+        $good = new Good();
+        $result = $good->where('tweet_id',$tweet_id)->where('user_id',Auth::user()->id)->get()->toArray();
+        if($result){
+            $results[0]['good'] = true;
+        }else{
+            $results[0]['good'] = false;
+        }
         return view('tweet_detail',['results' => $results]);
     }
 
@@ -108,7 +126,6 @@ class TimelineController extends Controller
     */
     public function tweet_edit(int $id){
         $results = $this->tweet->where('id',$id)->get()->toArray();
-
         return view('tweet_edit',['results' => $results]);
     }
 
@@ -144,6 +161,47 @@ class TimelineController extends Controller
             $results = $this->tweet->where('user_id','=',Auth::user()->id)->get()->toArray();
 
             return view('mypage',['results'=>$results]);
+        }elseif($request['back_page'] == 'good'){
+            $tweets = $this->tweet->with('user')->get()->toArray();
+            $good = new Good();
+            foreach($tweets as $key => $tweet){
+                $result = $good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
+                if($result){
+                    $tweets[$key]['good'] = true;
+                }else{
+                    $tweets[$key]['good'] = false;
+                }
+            }
+
+            return view('Auth.timeline',['tweets' => $tweets]);
         }
+    }
+
+
+    public function delete_tweet(int $id){
+        $this->tweet->where('id',$id)->delete();
+
+        $results = $this->tweet->where('user_id','=',Auth::user()->id)->get()->toArray();
+ 
+        return view('mypage',['results'=>$results]);
+    }
+
+    public function good_ajax(Request $request){
+        $tweet_id = $request['tweet_id'];
+        $user_id = $request['user_id'];
+
+        $good = new Good();
+        $result = $good->where('tweet_id',$tweet_id)->where('user_id',$user_id)->get()->toArray();
+        if(!empty($result)){
+            $good->where('tweet_id',$tweet_id)->where('user_id',$user_id)->delete();
+            $data = response()->json('削除しました');
+        }else{
+            $good = new Good();
+            $good->tweet_id = $tweet_id;
+            $good->user_id = $user_id;
+            $good->save();
+            $data = response()->json('登録しました');
+        }
+        return $data;
     }
 }

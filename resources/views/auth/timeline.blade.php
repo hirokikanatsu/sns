@@ -8,11 +8,12 @@
     <div>
         @if($tweets)
         <table class='tweet_area'>
-            @foreach($tweets as $tweet)
+            @foreach($tweets as $key => $tweet)
             <div class='tweet_space'>
                 <tr>
                     <th class='tweet_th'>{{$tweet['user']['name']}}</th>
                     <td class='tweet_td'><a href="{{route('tweet.detail',['id' =>$tweet['id']])}}">{{$tweet['tweet']}}</a></td>
+                    <td id='goods'><button type="button" class="good_btn <?php if($tweet['good']){ echo "font_red"; } ?>" id='good'  data-user-id=<?= Auth::user()->id ?> data-tweet-id="{{$tweet['id']}}"><i>&hearts;</i></button></td>   
                 </tr>
             </div>
             @endforeach
@@ -20,10 +21,10 @@
         @endif
     </div>
         <button class='tweet_create_btn fix_bottom'><a href="{{route('timeline')}}">ツイートする</a></button>
-        <script src="{{ mix('js/app.js') }}"></script>
+        
 
 <script>
-    // *******************考え直し*************************
+ // *******************考え直し*************************
     // let f_msg = "{{ Session::get('f_msg') }}";
     // let msg = document.getElementById('msg');
     // if(sessionStorage.getItem('f_msg') == "1"){

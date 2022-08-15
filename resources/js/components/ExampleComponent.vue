@@ -15,9 +15,16 @@
 </template>
 
 <script>
+    import $ from "jquery";
     export default {
         mounted() {
             console.log('Component mounted.')
+            let btn = document.getElementById('good');
+btn.addEventListener('click',function(){
+    let $this = $(this); 
+    let tweet_id = $this.data('tweet-id');
+    console.log(tweet_id)
+});
         }
     }
 </script>

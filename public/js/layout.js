@@ -1,3 +1,2 @@
-function click(){
-  console.log('aaaaa');
-}
+
+console.log('aaaaa');

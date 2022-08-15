@@ -15,5 +15,9 @@
             <button type="submit" class='tweet_create_btn'>ツイート</button>
         </div>
     </form>
+    <form action="{{route('back_page')}}" method="POST">
+        @csrf
+        <button class='back_btn' type="submit" name="back_page" value="timeline">戻る</button>
+    </form>
 </div>
 @endsection

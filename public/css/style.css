@@ -134,7 +134,7 @@
 .tweet_detailth{
     position: relative;
     left: 10em;
-    width:10em;
+    width:15em;
     font-size: 30px;
 }
 
@@ -187,6 +187,14 @@
     font-size: 20px;
 }
 
+.tweet_detailname{
+    width: 200px;
+    height:300px;
+    font-size: 30px;
+    position: absolute;
+    left: 5%;
+}
+
 .table_detail{
     border: solid 1px; 
     padding: 10px;
@@ -197,6 +205,14 @@
 table {
     border-collapse:  collapse; /* セルの線を重ねる */
 }
+
+.good_btn{
+    font-size: 60px;
+    line-height:50px;
+    position: absolute;
+    right: 20%;
+}
+
 
 /* .tweet_space{
     width: 100%;

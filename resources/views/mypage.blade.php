@@ -8,17 +8,17 @@
 <div class='mt100'>
     <div>
         <table>
-            @if($results)
-                @foreach($results as $result)
+            @if($tweets)
+                @foreach($tweets as $tweet)
                 <tr>
-                    <td class='tweet_detailth'>{{$result['id']}}</td>
-                    <td class='tweet_detailtd'>{{$result['tweet']}}</td>
-                    <td><button class='edit_btn'><a href="{{route('tweet_edit',['id'=>$result['id']])}}" class='block'>編集</a></button></td>
-                    <td><button class='delete_btn'><a href="{{route('delete_tweet',['id'=>$result['id']])}}">削除</a></button></td>
+                    <td class='tweet_detailth'>{{$tweet['id']}}</td>
+                    <td class='tweet_detailtd'>{{$tweet['tweet']}}</td>
+                    <td><button class='edit_btn'><a href="{{route('tweet_edit',['id'=>$tweet['id']])}}" class='block'>編集</a></button></td>
+                    <td><button class='delete_btn'><a href="{{route('delete_tweet',['id'=>$tweet['id']])}}">削除</a></button></td>
                 </tr>
                 @endforeach
             @else
-                <h1 class='t_center'>{{Auth::user()->name}}さんのツイートがありません</h1>
+                <h1 class='ml100'>{{Auth::user()->name}}さんのツイートがありません</h1>
             @endif
         </table>
         <form action="{{route('back_page')}}" method="POST">

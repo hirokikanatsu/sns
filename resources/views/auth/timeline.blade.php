@@ -11,7 +11,7 @@
             @foreach($tweets as $key => $tweet)
             <div class='tweet_space'>
                 <tr>
-                    <th class='tweet_th'>{{$tweet['user']['name']}}</th>
+                    <th class='tweet_th'><a href="{{route('profile',['id' =>$tweet['user']['id']])}}">{{$tweet['user']['name']}}</a></th>
                     <td class='tweet_td'><a href="{{route('tweet.detail',['id' =>$tweet['id']])}}">{{$tweet['tweet']}}</a></td>
                     <td id='goods'><button type="button" class="good_btn <?php if($tweet['good']){ echo "font_red"; } ?>" id='good'  data-user-id=<?= Auth::user()->id ?> data-tweet-id="{{$tweet['id']}}"><i>&hearts;</i></button></td>   
                 </tr>

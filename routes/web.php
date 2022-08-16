@@ -41,6 +41,12 @@ Route::post('/back_page',[TimelineController::class,'back_page'])->name('back_pa
 
 Route::group(['middleware' => ['auth']],function(){
 
+    //ユーザーフォローAjax
+    Route::post('/follow_ajax',[TimelineController::class,'follow_ajax'])->name('follow_ajax');
+
+    //ユーザープロフィール
+    Route::get('/profile/{id}',[TimelineController::class,'profile'])->name('profile');
+
     //いいね用Ajax
     Route::post('good_ajax',[TimelineController::class,'good_ajax'])->name('good_ajax');
 

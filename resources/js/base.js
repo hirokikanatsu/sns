@@ -11,11 +11,10 @@
 
 
 //いいねボタン押下時
-let btn = document.getElementById('good');
-// let goods = document.getElementById('goods').children[0][button#];
-// console.log(goods);
-if(btn){
-    btn.addEventListener('click',function(){
+let good_btn = document.getElementById('good');
+
+if(good_btn){
+    good_btn.addEventListener('click',function(){
         let $this = $(this); 
         let tweet_id = $this.data('tweet-id');
         let user_id = $this.data('user-id');
@@ -39,6 +38,37 @@ if(btn){
     });
 }
 
+//フォローボタン押下時
+let follow_btn = document.getElementById('follow');
+
+if(follow_btn){
+    follow_btn.addEventListener('click',function(){
+        let $this = $(this);
+        let follow_id = $this.data('follow_id');
+        let follower_id = $this.data('follower_id');
+        let follow = 'フォロー';
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+            }, 
+            type:'POST',
+            url:'/follow_ajax',
+            dataType:'json',
+            data:{ follow_id:follow_id,
+                follower_id:follower_id}
+        }).done(function(data){
+            console.log(data);
+            if(follow_btn.innerHTML == follow){
+                follow_btn.innerHTML = 'フォロー中';
+            }else{
+                follow_btn.innerHTML = 'フォロー';
+            }
+        }).fail(function(msg){
+            console.log('失敗');
+        })
+    })
+}
 
 
 

@@ -136,6 +136,10 @@ label{
     display: block;
 }
 
+.user_name{
+    font-size: 50px;
+}
+
 /* ここからメディアクエリ */
 
 @media (max-width: 767px) {

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TweetRequest;
 use App\Http\Requests\LoginRequest;
+use App\Models\Follow;
 use App\Models\Tweet;
 use App\Models\User;
 use App\Models\Good;
@@ -33,7 +34,7 @@ class TimelineController extends Controller
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
 
-            $tweets = $this->tweet->with('user')->get()->toArray();
+            $tweets = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
 
             $good = new Good();
             foreach($tweets as $key => $tweet){
@@ -153,16 +154,30 @@ class TimelineController extends Controller
     * ページバック
     */
     public function back_page(Request $request){
-        if($request['back_page'] == 'timeline'){
-            $tweets = $this->tweet->with('user')->get()->toArray();
+        if($request['back_page'] == 'timeline'){ //ツイートフォームからタイムラインへ遷移
+
+            $tweets = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
+            $good = new Good();
+            foreach($tweets as $key => $tweet){
+                $result = $good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
+                if($result){
+                    $tweets[$key]['good'] = true;
+                }else{
+                    $tweets[$key]['good'] = false;
+                }
+            }
 
             return view('Auth.timeline',['tweets' => $tweets]);
-        }elseif($request['back_page'] == 'mypage'){
-            $results = $this->tweet->where('user_id','=',Auth::user()->id)->get()->toArray();
 
-            return view('mypage',['results'=>$results]);
+        }elseif($request['back_page'] == 'mypage'){ //ツイート編集ページからマイページへ遷移
+
+            $tweets = $this->tweet->with('user')->where('user_id',Auth::user()->id)->get()->toArray();
+            
+            return view('mypage',['tweets'=>$tweets]);
+
         }elseif($request['back_page'] == 'good'){
-            $tweets = $this->tweet->with('user')->get()->toArray();
+
+            $tweets = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
             $good = new Good();
             foreach($tweets as $key => $tweet){
                 $result = $good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
@@ -178,6 +193,9 @@ class TimelineController extends Controller
     }
 
 
+    /*
+    * ツイート削除
+    */
     public function delete_tweet(int $id){
         $this->tweet->where('id',$id)->delete();
 
@@ -186,6 +204,9 @@ class TimelineController extends Controller
         return view('mypage',['results'=>$results]);
     }
 
+    /*
+    * いいね機能用Ajax
+    */
     public function good_ajax(Request $request){
         $tweet_id = $request['tweet_id'];
         $user_id = $request['user_id'];
@@ -204,4 +225,45 @@ class TimelineController extends Controller
         }
         return $data;
     }
+
+    /*
+    * ユーザープロフィール表示
+    */
+    public function profile(int $id){
+
+        $tweets = $this->tweet->with('user')->where('user_id',$id)->get()->toArray();
+
+        $follow = new Follow();
+        $result = $follow->where('follow_id',$tweets[0]['user']['id'])->where('follower_id',Auth::user()->id)->get()->toArray();
+
+        if(!empty($result)){
+            $is_follow = 'フォロー中';
+        }else{
+            $is_follow = 'フォロー';
+        }
+
+        return view('profile',['tweets'=>$tweets,'is_follow'=>$is_follow]);
+    }
+
+    /*
+    * ユーザーフォローAjax
+    */
+    public function follow_ajax(Request $request){
+        $follow_id = $request['follow_id'];
+        $follower_id = $request['follower_id'];
+
+        $follow = new Follow();
+        $result = $follow->where('follow_id',$follow_id)->where('follower_id',$follower_id)->get()->toArray();
+
+        if(!empty($result)){
+            $follow->where('follow_id',$follow_id)->where('follower_id',$follower_id)->delete();
+            return response()->json('フォローを解除しました');
+        }else{
+            $follow->follow_id = $follow_id;
+            $follow->follower_id = $follower_id;
+            $follow->save();
+            return response()->json('フォローしました');
+        }
+    }
+
 }

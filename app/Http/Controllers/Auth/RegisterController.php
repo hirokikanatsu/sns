@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -64,6 +65,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+
+
+        // dd($data);
+        // $user = new User();
+        // $image_path = $data['image']->store('public/img');
+        // $path = Storage::path('images/'.$data['image']);
+        // $imagefile = $data()->file('image');
+        // $image =file($path);
+        // dd($path);
+        // $file_name = basename($path);
+        // $result = Storage::put('images/'.$file_name,$path);
+        // dd($result);
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],

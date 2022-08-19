@@ -4,9 +4,8 @@
     @if(session('f_msg'))
         <div class='f_msg' id='msg'>{{session('f_msg')}}</div>
     @endif
-    
     <div>
-        @if($tweets)
+        @if($tweets != 'ツイートがありません')
         <table class='tweet_area'>
             @foreach($tweets as $key => $tweet)
             <div class='tweet_space'>
@@ -18,6 +17,8 @@
             </div>
             @endforeach
         </table>
+        @else
+        <h1 class='t_center mt100'>フォローしているユーザーのツイートがありません</h1>
         @endif
     </div>
         <button class='tweet_create_btn fix_bottom'><a href="{{route('timeline')}}">ツイートする</a></button>

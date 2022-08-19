@@ -11,7 +11,7 @@
                 @endforeach
             @endif
             <input type="text" name="tweet" id='tweet_formbox' placeholder="今どうしてる？" value="{{old('tweet')}}">
-            
+             
             <button type="submit" class='tweet_create_btn'>ツイート</button>
         </div>
     </form>

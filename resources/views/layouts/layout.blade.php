@@ -1,3 +1,7 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -13,10 +17,9 @@
     </head>
 
     <body>
-
     <div id='header_wrapper' class="t_center">
         <div>
-            <img id='myicon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
+            <img id='myicon' src="{{ asset('storage/'. Auth::user()->image) }}" />
             <img id='icon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
             <button id='mypage'><a href="{{route('mypage')}}">マイページ</a></button>
             <form action="{{route('logout')}}" method='post'>

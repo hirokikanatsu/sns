@@ -89,6 +89,19 @@
     top:300px;
 }
 
+#myprofile{
+    width: 150px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    color:red;
+    border-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 12%;
+    top:200px;
+}
+
 #tweet_form{
     text-align: center;
 }

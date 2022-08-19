@@ -8,10 +8,12 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TweetRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\ProfileRequest;
 use App\Models\Follow;
 use App\Models\Tweet;
 use App\Models\User;
 use App\Models\Good;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Ui\Presets\React;
 
@@ -21,6 +23,9 @@ class TimelineController extends Controller
     public function __construct()
     {
         $this->tweet = new Tweet;
+        $this->follow = new Follow;
+        $this->good = new Good;
+        $this->user = new User;
     }
 
     /*
@@ -34,18 +39,45 @@ class TimelineController extends Controller
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
 
-            $tweets = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
+            $results = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
 
-            $good = new Good();
-            foreach($tweets as $key => $tweet){
-                $result = $good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
-                if($result){
-                    $tweets[$key]['good'] = true;
+
+            $following_users = $this->follow->where('follower_id',Auth::user()->id)->get()->toArray();
+
+            $user_ids = [];
+            $tweets = [];
+
+            foreach($following_users as $following_user){
+                $user_ids[] = $following_user['follow_id'];
+            }
+
+            foreach($results as $result){
+                if(is_array($user_ids)){
+                    foreach($user_ids as $user_id){
+                        if($result['user_id'] == $user_id){
+                            $tweets[] = $result;
+                        }
+                    }
                 }else{
-                    $tweets[$key]['good'] = false;
+                    if($result['user_id'] == $user_ids){
+                        $tweets[] = $result;
+                    }
                 }
             }
-        
+
+            if($tweets == []){
+                $tweets = 'ツイートがありません';
+            }else{
+                foreach($tweets as $key => $tweet){
+                    $result = $this->good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
+                    if($result){
+                        $tweets[$key]['good'] = true;
+                    }else{
+                        $tweets[$key]['good'] = false;
+                    }
+                }
+            }
+            
             return view('Auth.timeline',['tweets' => $tweets]);
         }
 
@@ -103,8 +135,7 @@ class TimelineController extends Controller
     public function tweetDetail(int $tweet_id){
         $results = $this->tweet->with('user')->where('id','=',$tweet_id)->get()->toArray();
 
-        $good = new Good();
-        $result = $good->where('tweet_id',$tweet_id)->where('user_id',Auth::user()->id)->get()->toArray();
+        $result = $this->good->where('tweet_id',$tweet_id)->where('user_id',Auth::user()->id)->get()->toArray();
         if($result){
             $results[0]['good'] = true;
         }else{
@@ -119,7 +150,7 @@ class TimelineController extends Controller
     public function mypage(){
         $results = $this->tweet->where('user_id','=',Auth::user()->id)->get()->toArray();
 
-        return view('mypage',['results'=>$results]);
+        return view('mypage',['tweets'=>$results]);
     }
 
     /*
@@ -146,6 +177,7 @@ class TimelineController extends Controller
         }
 
         $results = $this->tweet->where('user_id','=',Auth::user()->id)->get()->toArray();
+        $request->session()->put('key', $results);
  
         return view('mypage',['results'=>$results]);
     }
@@ -156,14 +188,41 @@ class TimelineController extends Controller
     public function back_page(Request $request){
         if($request['back_page'] == 'timeline'){ //ツイートフォームからタイムラインへ遷移
 
-            $tweets = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
-            $good = new Good();
-            foreach($tweets as $key => $tweet){
-                $result = $good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
-                if($result){
-                    $tweets[$key]['good'] = true;
+            $results = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
+
+            $following_users = $this->follow->where('follower_id',Auth::user()->id)->get()->toArray();
+
+            $user_ids = [];
+            $tweets = [];
+
+            foreach($following_users as $following_user){
+                $user_ids[] = $following_user['follow_id'];
+            }
+
+            foreach($results as $result){
+                if(is_array($user_ids)){
+                    foreach($user_ids as $user_id){
+                        if($result['user_id'] == $user_id){
+                            $tweets[] = $result;
+                        }
+                    }
                 }else{
-                    $tweets[$key]['good'] = false;
+                    if($result['user_id'] == $user_ids){
+                        $tweets[] = $result;
+                    }
+                }
+            }
+
+            if($tweets == []){
+                $tweets = 'ツイートがありません';
+            }else{
+                foreach($tweets as $key => $tweet){
+                    $result = $this->good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
+                    if($result){
+                        $tweets[$key]['good'] = true;
+                    }else{
+                        $tweets[$key]['good'] = false;
+                    }
                 }
             }
 
@@ -177,14 +236,41 @@ class TimelineController extends Controller
 
         }elseif($request['back_page'] == 'good'){
 
-            $tweets = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
-            $good = new Good();
-            foreach($tweets as $key => $tweet){
-                $result = $good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
-                if($result){
-                    $tweets[$key]['good'] = true;
+            $results = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
+
+            $following_users = $this->follow->where('follower_id',Auth::user()->id)->get()->toArray();
+
+            $user_ids = [];
+            $tweets = [];
+
+            foreach($following_users as $following_user){
+                $user_ids[] = $following_user['follow_id'];
+            }
+
+            foreach($results as $result){
+                if(is_array($user_ids)){
+                    foreach($user_ids as $user_id){
+                        if($result['user_id'] == $user_id){
+                            $tweets[] = $result;
+                        }
+                    }
                 }else{
-                    $tweets[$key]['good'] = false;
+                    if($result['user_id'] == $user_ids){
+                        $tweets[] = $result;
+                    }
+                }
+            }
+
+            if($tweets == []){
+                $tweets = 'ツイートがありません';
+            }else{
+                foreach($tweets as $key => $tweet){
+                    $result = $this->good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
+                    if($result){
+                        $tweets[$key]['good'] = true;
+                    }else{
+                        $tweets[$key]['good'] = false;
+                    }
                 }
             }
 
@@ -211,16 +297,14 @@ class TimelineController extends Controller
         $tweet_id = $request['tweet_id'];
         $user_id = $request['user_id'];
 
-        $good = new Good();
-        $result = $good->where('tweet_id',$tweet_id)->where('user_id',$user_id)->get()->toArray();
+        $result = $this->good->where('tweet_id',$tweet_id)->where('user_id',$user_id)->get()->toArray();
         if(!empty($result)){
-            $good->where('tweet_id',$tweet_id)->where('user_id',$user_id)->delete();
+            $this->good->where('tweet_id',$tweet_id)->where('user_id',$user_id)->delete();
             $data = response()->json('削除しました');
         }else{
-            $good = new Good();
-            $good->tweet_id = $tweet_id;
-            $good->user_id = $user_id;
-            $good->save();
+            $this->good->tweet_id = $tweet_id;
+            $this->good->user_id = $user_id;
+            $this->good->save();
             $data = response()->json('登録しました');
         }
         return $data;
@@ -233,8 +317,7 @@ class TimelineController extends Controller
 
         $tweets = $this->tweet->with('user')->where('user_id',$id)->get()->toArray();
 
-        $follow = new Follow();
-        $result = $follow->where('follow_id',$tweets[0]['user']['id'])->where('follower_id',Auth::user()->id)->get()->toArray();
+        $result = $this->follow->where('follow_id',$tweets[0]['user']['id'])->where('follower_id',Auth::user()->id)->get()->toArray();
 
         if(!empty($result)){
             $is_follow = 'フォロー中';
@@ -252,18 +335,53 @@ class TimelineController extends Controller
         $follow_id = $request['follow_id'];
         $follower_id = $request['follower_id'];
 
-        $follow = new Follow();
-        $result = $follow->where('follow_id',$follow_id)->where('follower_id',$follower_id)->get()->toArray();
+        $result = $this->follow->where('follow_id',$follow_id)->where('follower_id',$follower_id)->get()->toArray();
 
         if(!empty($result)){
-            $follow->where('follow_id',$follow_id)->where('follower_id',$follower_id)->delete();
+            $this->follow->where('follow_id',$follow_id)->where('follower_id',$follower_id)->delete();
             return response()->json('フォローを解除しました');
         }else{
-            $follow->follow_id = $follow_id;
-            $follow->follower_id = $follower_id;
-            $follow->save();
+            $this->follow->follow_id = $follow_id;
+            $this->follow->follower_id = $follower_id;
+            $this->follow->save();
             return response()->json('フォローしました');
         }
+    }
+
+    /*
+    * マイプロフィール編集画面
+    */
+    public function myprofile(){
+        return view('edit_myprofile');
+    }
+
+    /*
+    * マイプロフィール編集実行
+    */
+    public function edit_myprofile(ProfileRequest $request){
+        $image_file = $request->file('image');
+        $temp_path = $image_file->store('public');
+        $image_name = basename($temp_path);
+
+        $login_user = $this->user->where('id',Auth::user()->id)->first();
+
+        if(!empty($login_user->image)){
+            Storage::disk('public')->delete($login_user->image);
+        }
+
+        $login_user->image = $image_name;
+        $login_user->save();
+
+        $results = $this->tweet->where('user_id','=',Auth::user()->id)->get()->toArray();
+
+        return view('mypage',['tweets'=>$results]);
+
+    }
+
+
+
+    public function get_all_tweet($user_id){
+        $this->tweet->with('user')->where('user_id','!=',$user_id)->get()->toArray();
     }
 
 }

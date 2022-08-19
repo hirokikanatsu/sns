@@ -41,6 +41,12 @@ Route::post('/back_page',[TimelineController::class,'back_page'])->name('back_pa
 
 Route::group(['middleware' => ['auth']],function(){
 
+    //プロフィール編集実行
+    Route::post('edit_myprofile',[TimelineController::class,'edit_myprofile'])->name('edit_myprofile');
+
+    //プロフィール編集画面
+    Route::get('myprofile',[TimelineController::class,'myprofile'])->name('myprofile');
+
     //ユーザーフォローAjax
     Route::post('/follow_ajax',[TimelineController::class,'follow_ajax'])->name('follow_ajax');
 

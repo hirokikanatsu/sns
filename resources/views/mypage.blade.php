@@ -1,3 +1,7 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+?>
 @extends('layouts.layout')
 
 @section('content')
@@ -5,6 +9,7 @@
         <div class='f_msg' id='msg'>{{session('f_msg')}}</div>
     @endif
 
+<button id='myprofile'><a href="{{route('myprofile')}}">プロフィール</a></button>
 <div class='mt100'>
     <div>
         <table>

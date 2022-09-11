@@ -129,6 +129,26 @@
     z-index: 5;
 }
 
+.edit_profile_btn{
+    width:200px;
+    height: 50px;
+    background-color: #2695E0;
+    border-radius: 10px;
+    font-size: 25px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.edit_profile_btn:hover{
+    width:200px;
+    height: 50px;
+    background-color: #fff;
+    border-radius: 10px;
+    font-size: 25px;
+    color: #2695E0;
+    cursor: pointer;
+}
+
 .fix_bottom{
     position: fixed;
     bottom:30px;
@@ -275,7 +295,11 @@ div#form{
   margin-top:-200px;
 }
 div.form-item{position: relative; display: block; margin-bottom: 20px;}
- input{transition: all .2s ease;}
+ input{
+    transition: all .2s ease;
+    width: 500px;
+    height: 30px;
+}
  input.form-style{
   color:#8a8a8a;
   display: block;
@@ -292,6 +316,7 @@ div.form-item{position: relative; display: block; margin-bottom: 20px;}
   margin: 0 auto;
 }
 div.form-item .form-style:focus{outline: none; border:1px solid #58bff6; color:#58bff6; }
+.edit_profile:hover{outline: none; border:3px solid red; color:black; }
 div.form-item p.formLabel {
   position: absolute;
   left:26px;
@@ -317,6 +342,7 @@ input[type="submit"].login{
 }
 input[type="submit"].login:hover{background-color: #fff; border:1px solid #55b1df; color:#55b1df; cursor:pointer;}
 input[type="submit"].login:focus{outline: none;}
+input:hover{color:#aaa; }
 
 .forget_pass{
     font-size: 15px;

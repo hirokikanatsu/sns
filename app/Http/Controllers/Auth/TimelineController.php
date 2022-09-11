@@ -354,18 +354,30 @@ class TimelineController extends Controller
     * マイプロフィール編集実行
     */
     public function edit_myprofile(ProfileRequest $request){
-        $image_file = $request->file('image');
-        $temp_path = $image_file->store('public');
-        $image_name = basename($temp_path);
-
+        $params = $request->only('name','email','password','password_confirmation');
+        
         $login_user = $this->user->where('id',Auth::user()->id)->first();
 
-        if(!empty($login_user->image)){
-            Storage::disk('public')->delete($login_user->image);
-        }
+        if($request->has(['name', 'email','password','password_confirmation'])){
+            $login_user = $this->user->where('id',Auth::user()->id)->first();
 
-        $login_user->image = $image_name;
-        $login_user->save();
+            if($request->has('image')){
+                $image_file = $request->file('image');
+                $temp_path = $image_file->store('public');
+                $image_name = basename($temp_path);
+
+                if(!empty($login_user->image)){
+                    Storage::disk('public')->delete($login_user->image);
+                }
+
+                $login_user->image = $image_name;
+            }
+
+            $login_user->name = $params['name'];
+            $login_user->email = $params['email'];
+            $login_user->save();
+        }
+        
 
         if(session('new_image') !== ''){
             session()->forget('new_image');

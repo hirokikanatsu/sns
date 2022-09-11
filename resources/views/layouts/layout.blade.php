@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Auth;
                 <img id='myicon' src="{{ asset('img/noimage.png') }}" />
             @endif
             <img id='icon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
-            <div id='myname'>{{Auth::user()->name}}さんおかえりなさい</div>
+            <div id='myname'>{{Auth::user()->name}}</div>
             <button id='mypage'><a href="{{route('mypage')}}">マイページ</a></button>
             <form action="{{route('logout')}}" method='post'>
                 @csrf

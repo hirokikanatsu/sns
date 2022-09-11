@@ -10,7 +10,7 @@
                 <tr>
                     <td class='tweet_detailname'>{{$result['user']['name']}}</td>
                     <td class='tweet_detailth'>{{$result['tweet']}}</td>
-                    <td><button type="button" class="good_btn <?php if($result['good']){ echo "font_red"; } ?>" id='good' data-user-id=<?= Auth::user()->id ?> data-tweet-id="{{$result['id']}}"><i>&hearts;</i></button></td>                    
+                    <td><button type="button" class="detail_good_btn <?php if($result['good']){ echo "font_red"; } ?>" id='good' data-user-id=<?= Auth::user()->id ?> data-tweet-id="{{$result['id']}}"><i>&hearts;</i></button></td>                    
                 </tr>
                 @endforeach
             @endif

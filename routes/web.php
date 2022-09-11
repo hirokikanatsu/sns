@@ -27,16 +27,17 @@ Route::get('/', function () {
 
 Route::post('/back_page',[TimelineController::class,'back_page'])->name('back_page');
 
-
-// Route::group(['middleware' => ['guest']],function(){
-
-    //ログイン画面へ遷移
-    Route::get('/login',[LoginController::class,'login_top'])->name('login');
+Route::group(['middleware' => ['guest']],function(){
 
     //ログイン
     Route::post('/login_conf', [TimelineController::class,'loginConfirm'])->name('login_conf');
-// });
+    
+    //ユーザー新規登録などの画面遷移はこちらに記載予定
 
+    //ログイン画面へ遷移
+    // Route::get('/login',[LoginController::class,'login_top'])->name('login');
+
+});
  
 
 Route::group(['middleware' => ['auth']],function(){

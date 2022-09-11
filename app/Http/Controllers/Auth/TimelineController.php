@@ -33,7 +33,7 @@ class TimelineController extends Controller
     */
     public function loginConfirm(LoginRequest $request)
     {
-        
+        // dd('OK');
         $credentials = $request->only('email','password');
 
         if(Auth::attempt($credentials)){
@@ -70,6 +70,7 @@ class TimelineController extends Controller
             }else{
                 foreach($tweets as $key => $tweet){
                     $result = $this->good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
+
                     if($result){
                         $tweets[$key]['good'] = true;
                     }else{
@@ -79,11 +80,12 @@ class TimelineController extends Controller
             }
             
             return view('Auth.timeline',['tweets' => $tweets]);
+        }else{
+            dd('error');
+            return back()->withErrors([
+                'login_error' => 'ユーザー情報が一致しませんでした。再入力してください',
+            ]);
         }
-
-        return back()->withErrors([
-            'login_error' => 'ユーザー情報が一致しませんでした。再入力してください',
-        ]);;
     }
 
     /*
@@ -124,7 +126,43 @@ class TimelineController extends Controller
             session()->flash('f_msg','ツイート失敗しました');
         }
 
-        $tweets = $this->tweet->all();
+        $results = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
+
+            $following_users = $this->follow->where('follower_id',Auth::user()->id)->get()->toArray();
+
+            $user_ids = [];
+            $tweets = [];
+
+            foreach($following_users as $following_user){
+                $user_ids[] = $following_user['follow_id'];
+            }
+
+            foreach($results as $result){
+                if(is_array($user_ids)){
+                    foreach($user_ids as $user_id){
+                        if($result['user_id'] == $user_id){
+                            $tweets[] = $result;
+                        }
+                    }
+                }else{
+                    if($result['user_id'] == $user_ids){
+                        $tweets[] = $result;
+                    }
+                }
+            }
+
+            if($tweets == []){
+                $tweets = 'ツイートがありません';
+            }else{
+                foreach($tweets as $key => $tweet){
+                    $result = $this->good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
+                    if($result){
+                        $tweets[$key]['good'] = true;
+                    }else{
+                        $tweets[$key]['good'] = false;
+                    }
+                }
+            }
         
         return view('Auth.timeline',['tweets' => $tweets]);
     }
@@ -186,55 +224,12 @@ class TimelineController extends Controller
     * ページバック
     */
     public function back_page(Request $request){
-        if($request['back_page'] == 'timeline'){ //ツイートフォームからタイムラインへ遷移
-
-            $results = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
-
-            $following_users = $this->follow->where('follower_id',Auth::user()->id)->get()->toArray();
-
-            $user_ids = [];
-            $tweets = [];
-
-            foreach($following_users as $following_user){
-                $user_ids[] = $following_user['follow_id'];
-            }
-
-            foreach($results as $result){
-                if(is_array($user_ids)){
-                    foreach($user_ids as $user_id){
-                        if($result['user_id'] == $user_id){
-                            $tweets[] = $result;
-                        }
-                    }
-                }else{
-                    if($result['user_id'] == $user_ids){
-                        $tweets[] = $result;
-                    }
-                }
-            }
-
-            if($tweets == []){
-                $tweets = 'ツイートがありません';
-            }else{
-                foreach($tweets as $key => $tweet){
-                    $result = $this->good->where('tweet_id',$tweet['id'])->where('user_id',Auth::user()->id)->get()->toArray();
-                    if($result){
-                        $tweets[$key]['good'] = true;
-                    }else{
-                        $tweets[$key]['good'] = false;
-                    }
-                }
-            }
-
-            return view('Auth.timeline',['tweets' => $tweets]);
-
-        }elseif($request['back_page'] == 'mypage'){ //ツイート編集ページからマイページへ遷移
+        if($request['back_page'] == 'mypage'){ //ツイート編集ページからマイページへ遷移
 
             $tweets = $this->tweet->with('user')->where('user_id',Auth::user()->id)->get()->toArray();
             
             return view('mypage',['tweets'=>$tweets]);
-
-        }elseif($request['back_page'] == 'good'){
+        }else{ //上記以外の全ての「戻る」ボタン
 
             $results = $this->tweet->with('user')->where('user_id','!=',Auth::user()->id)->get()->toArray();
 
@@ -372,6 +367,12 @@ class TimelineController extends Controller
         $login_user->image = $image_name;
         $login_user->save();
 
+        if(session('new_image') !== ''){
+            session()->forget('new_image');
+        }
+
+        session()->push('new_image', $login_user->image);
+
         $results = $this->tweet->where('user_id','=',Auth::user()->id)->get()->toArray();
 
         return view('mypage',['tweets'=>$results]);
@@ -379,6 +380,10 @@ class TimelineController extends Controller
     }
 
 
+    //phpunitのテスト用
+    public function addnumber($a,$b){
+        return $a + $b ;
+    }
 
     public function get_all_tweet($user_id){
         $this->tweet->with('user')->where('user_id','!=',$user_id)->get()->toArray();

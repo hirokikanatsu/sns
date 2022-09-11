@@ -1,8 +1,5 @@
-@extends('layouts.app')
-
-@section('content')
-
-<div class="login_container">
+<div id='back_modal' style="display: none;" >
+<div class="login_container" id='login_container'>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="t_center">
@@ -31,17 +28,14 @@
 
                             <div class="form-item">
                                 <p class="pull-left register"><a href="#">Register</a></p>
-                                <input type="submit" class="login pull-right" value="Log In">
+                                <input type="submit" class="login pull-right" id='login_btn' value="Log In">
                                 <div class="clear-fix"></div>
                             </div>  
                     </div>
+                    <div id='close_modal'>閉じる</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-            
-@endsection
-
-
+</div>

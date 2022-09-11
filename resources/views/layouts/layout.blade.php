@@ -19,8 +19,15 @@ use Illuminate\Support\Facades\Auth;
     <body>
     <div id='header_wrapper' class="t_center">
         <div>
-            <img id='myicon' src="{{ asset('storage/'. Auth::user()->image) }}" />
+            @if(session('new_image') != null)
+                <img id='myicon' src="{{ asset('storage/'<?php echo session('new_image')[0]?>) }}" />
+            @elseif(!empty(Auth::user()->image))
+                <img id='myicon' src="{{ asset('storage/'. Auth::user()->image) }}" />
+            @else
+                <img id='myicon' src="{{ asset('img/noimage.png') }}" />
+            @endif
             <img id='icon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
+            <div id='myname'>{{Auth::user()->name}}さんおかえりなさい</div>
             <button id='mypage'><a href="{{route('mypage')}}">マイページ</a></button>
             <form action="{{route('logout')}}" method='post'>
                 @csrf

@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{{ asset('css/style.css') }}" rel="stylesheet">
         <link href="{{ asset('css/base.css') }}" rel="stylesheet">
+        <script src="{{ mix('js/app.js') }}"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Laravel</title>
 
@@ -23,8 +24,8 @@
             </div>
             
         </div>
-        <script src="{{ asset('js/base.js') }}"></script>
+        @include('auth.login_modal');
     </body>
+    <script src="{{ asset('js/base.js') }}"></script>
 
-    @include('auth.login_modal');
 </html>

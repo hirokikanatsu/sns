@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 if(login_logo){
     login_logo.addEventListener('click',function(e){
-        console.log('wwwww');
+        console.log('aaaaaaaaa');
         e.preventDefault();
         $('#back_modal').css({'display':'block'});
         $('#back_modal').toggleClass('back_modal');
@@ -26,32 +26,26 @@ if(login_btn){
     })
 }
 
-if(back_modal){
-    back_modal.addEventListener('click',function(){
-        console.log('qqqqq');できない,初めからイベント内容見直す    
-        $('.back_modal').css({'display':'none'});
-        $('.back_modal').toggleClass('back_modal');
-    })
+//無限スクロール
+$(window).on("scroll", function (){
+    // スクロール位置
+    var document_h = $(document).height();              
+    var window_h = $(window).height() + $(window).scrollTop();    
+    var scroll = (document_h - window_h);
+
+    // 画面最下部にスクロールされている場合
+    if (scroll <= 1) {
+        // ajaxコンテンツ追加処理
+        ajax_add_tweet();
+    }
+});
+
+
+//ツイートバリデーション
+function tweet_validation(){
+    let count = document.getElementById('tweet_formbox').value();
+    console.log(count);
 }
-
-if(close_modal){
-    $(document).on('click','close_modal',function(){
-        $('#back_modal').css({'display':'none'});
-        $('#back_modal').toggleClass('back_modal');
-    })
-}
-
-
-
-// document.getElementById('delete_tweet').onclick = delete();
-
-// if(window.confirm('本当に削除しますか??')){
-//     alert('aaaaa');
-//     window.location.href = "{{ url::to('delete_tweet') }}";
-// }
-
-// console.log('aaaaa');
-
 
 //いいねボタン押下時
 let good_btn = document.getElementById('good');
@@ -62,7 +56,6 @@ var goods = Array.from(good);
 
 goods.forEach(function(target){
     target.addEventListener('click',function(){
-        console.log('www');
         let $this = $(this); 
         let tweet_id = $this.data('tweet-id');
         let user_id = $this.data('user-id');
@@ -85,6 +78,17 @@ goods.forEach(function(target){
         })
     });
 })
+
+function inputChange(){
+    console.log('Change');
+}
+
+let email = document.getElementById('email').val();
+console.log(email);
+if(email.addEventListener('change',function(){
+    console.log(email);
+}));
+
     
 
 // if(good_btn){
@@ -141,6 +145,41 @@ if(follow_btn){
         }).fail(function(msg){
             console.log('失敗');
         })
+    })
+}
+
+//ツイートのajax読み込み
+function ajax_add_tweet(){
+    // 追加ツイート
+    let add_content = "";
+
+    // コンテンツ件数           
+    let count = $("#count").val();
+
+    // ajax処理
+    $.post({
+        headers: {
+            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+        }, 
+        type: "post",
+        datatype: "json",
+        url: "/infinite_scroll",
+        data:{ count : count }
+    }).done(function(data){
+
+        console.log(data);
+        
+        // // コンテンツ生成
+        // $.each(data,function(key, val){
+        //     add_content += "<div>"+val.content+"</div>";
+        // })
+        // // コンテンツ追加
+        // $("#content").append(add_content);
+        // // 取得件数を加算してセット
+        // count += data.length
+        // $("#count").val(count);
+    }).fail(function(e){
+        console.log(e);
     })
 }
 

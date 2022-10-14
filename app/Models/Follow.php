@@ -12,4 +12,10 @@ class Follow extends Model
     protected $fillable = [   
         'follow_id', 'follower_id',
     ];
+
+    //ログインユーザーのフォローしてるユーザーIDを全て取得
+    public function scopeFollowIds($query)
+    {
+        return $query->where('follower_id',\Auth::id())->pluck('follow_id')->toArray();
+    }
 }

@@ -394,6 +394,11 @@ input:hover{color:#aaa; }
     font-weight: bold;
 }
 
+#error_tweet{
+    margin-left: 250px;
+    font-size: 30px;
+}
+
 
 
 

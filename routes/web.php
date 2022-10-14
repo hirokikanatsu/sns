@@ -30,17 +30,19 @@ Route::post('/back_page',[TimelineController::class,'back_page'])->name('back_pa
 Route::group(['middleware' => ['guest']],function(){
 
     //ログイン
-    Route::post('/login_conf', [TimelineController::class,'loginConfirm'])->name('login_conf');
-    
-    //ユーザー新規登録などの画面遷移はこちらに記載予定
+    Route::post('/login_conf',[LoginController::class,'login'])->name('login_conf');
 
-    //ログイン画面へ遷移
-    // Route::get('/login',[LoginController::class,'login_top'])->name('login');
 
 });
  
 
 Route::group(['middleware' => ['auth']],function(){
+
+    //トップページ
+    Route::get('/login_success',[TimelineController::class,'login_success'])->name('login_success');
+
+    //無限スクロール（ツイート読み込み）
+    Route::post('/infinite_scroll',[TimelineController::class,'infinite_scroll'])->name('infinite_scroll');
 
     //プロフィール編集実行
     Route::post('edit_myprofile',[TimelineController::class,'edit_myprofile'])->name('edit_myprofile');

@@ -1,7 +1,4 @@
-<?php
 
-use Illuminate\Support\Facades\Auth;
-?>
 @extends('layouts.layout')
 
 @section('content')
@@ -14,9 +11,9 @@ use Illuminate\Support\Facades\Auth;
     <div>
         <table>
             @if($tweets)
-                @foreach($tweets as $tweet)
+                @foreach($tweets as $key => $tweet)
                 <tr>
-                    <td class='tweet_detailth'>{{$tweet['id']}}</td>
+                    <td class='tweet_detailth'>{{$key+1}}</td>
                     <td class='tweet_detailtd'>{{$tweet['tweet']}}</td>
                     <td><button class='edit_btn'><a href="{{route('tweet_edit',['id'=>$tweet['id']])}}" class='block'>編集</a></button></td>
                     <td><button class='delete_btn'><a href="{{route('delete_tweet',['id'=>$tweet['id']])}}">削除</a></button></td>

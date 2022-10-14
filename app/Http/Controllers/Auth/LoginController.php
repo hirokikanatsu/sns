@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\Good;
+use App\Models\Tweet;
+use App\Models\Follow;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -27,7 +32,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/login_conf';
+    // protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -36,7 +42,30 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        $this->tweet = new Tweet;
+        $this->good = new Good;
+        $this->follow = new Follow;
+        $this->user = new User;
         // $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Write code on Method
+     *
+     * @return response()
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('login_success');
+        }
+        return redirect()->route('home');
     }
 
     public function login_top(){

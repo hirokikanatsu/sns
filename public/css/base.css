@@ -79,6 +79,10 @@ ul {
     margin-top: 100px;
 }
 
+.mb50{
+    margin-bottom: 50px;
+}
+
 .pt100{
     padding-top: 100px;
 }
@@ -141,6 +145,10 @@ label{
 
 .font_red{
     color: red;
+}
+
+.bold{
+    font-weight: bold;
 }
 
 .err_msg{

@@ -17,6 +17,7 @@ class CreateTweetsTable extends Migration
             $table->id();
             $table->integer('user_id'); 
             $table->text('tweet');
+            $table->string('file_name');
             $table->timestamps();
         });
     }

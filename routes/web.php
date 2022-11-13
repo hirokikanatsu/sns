@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\TimelineController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +82,13 @@ Route::group(['middleware' => ['auth']],function(){
     Route::get('/timeline',[TimelineController::class,'formTimeline'])->name('timeline');
 
     //ツイート作成
-    Route::post('/timeline', [TimelineController::class,'postTweet'])->name('form_timeline'); 
+    Route::post('/timeline', [TimelineController::class,'postTweet'])->name('form_timeline');
+
+    //メール送信
+    Route::get('/mail/send', [MailController::class,'send'])->name('mail');
+
+    //動画視聴
+    Route::get('/watch_movie/{movie_path}',[TimelineController::class,'watch_movie'])->name('watch_movie');
 });
 
 

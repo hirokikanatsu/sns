@@ -2,7 +2,7 @@
 
 @section('content')
 <div class='form_wrapper'>
-    <form action="{{route('edit_conf',['id' => $results[0]['id']])}}" method="post">
+    <form action="{{route('edit_conf',['id' => $results[0]['id']])}}" method="post" enctype='multipart/form-data'>
         @csrf
         <div id='tweet_form'>
             @if ($errors->any())
@@ -14,6 +14,8 @@
             <input type="hidden" name='id' value="{{$results[0]['id']}}">
             
             <button type="submit" class='tweet_create_btn'>ツイート</button>
+
+            <input id="tweet_image" type="file"  name="image">
         </div>
     </form>
     <form action="{{route('back_page')}}" method="POST">

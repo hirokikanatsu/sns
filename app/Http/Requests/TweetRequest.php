@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+// use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class TweetRequest extends FormRequest
 {
@@ -21,11 +23,22 @@ class TweetRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
-            'tweet' => ['required', 'max:300'],
-        ];
+        $file = $request->file_name;
+        $file_ext = pathinfo($file, PATHINFO_EXTENSION);
+        // $file_ext = File::extension($file);
+        if($file_ext == 'mp4' || $file_ext == 'mov'){
+            return [
+                'tweet' => ['required', 'max:300'],
+                'image' => ['mimes:mov,mp4','max:56000'],
+            ];
+        }else{
+            return [
+                'tweet' => ['required', 'max:300'],
+                'image' => ['mimes:jpeg,jpg,png','max:1024'],
+            ];
+        }
     }
 
 
@@ -33,7 +46,9 @@ class TweetRequest extends FormRequest
     {
         return [
             'tweet.required' => 'ツイート本文は必ず入力してください。',
-            'tweet.max' => 'ツイートは300文字以内にしてください'
+            'tweet.max' => 'ツイートは300文字以内にしてください',
+            'image.mimes' => '拡張子が不正です',
+            'image.max'  => 'ファイルサイズが大きすぎます'
         ];
     }
 }

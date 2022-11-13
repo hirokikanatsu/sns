@@ -78,10 +78,15 @@ class TimelineController extends Controller
     */
     public function postTweet(TweetRequest $request) 
     {
-        
-
         $this->tweet->user_id = Auth::user()->id;
         $this->tweet->tweet = $request->tweet;
+        if($request->has('image')){
+            $image_file = $request->file('image');
+            $temp_path = $image_file->store('public');
+            $image_name = basename($temp_path);
+        }
+        $this->tweet->file_name = $image_name;
+
         $this->tweet->save();
         if($this->tweet->save()){
             session()->flash('f_msg','ツイートしました');
@@ -104,7 +109,6 @@ class TimelineController extends Controller
                 }
             }
         }
-        
         return view('Auth.timeline',['tweets' => $tweets]);
     }
 
@@ -120,6 +124,7 @@ class TimelineController extends Controller
         }else{
             $results[0]['good'] = false;
         }
+
         return view('tweet_detail',['results' => $results]);
     }
 
@@ -147,6 +152,12 @@ class TimelineController extends Controller
         $tweet = $this->tweet->find($id);
         
         $tweet->tweet = $request->tweet;
+        if($request->has('image')){
+            $image_file = $request->file('image');
+            $temp_path = $image_file->store('public');
+            $image_name = basename($temp_path);
+        }
+        $tweet->file_name = $image_name;
         $tweet->save();
 
         if($tweet->save()){
@@ -158,7 +169,7 @@ class TimelineController extends Controller
         $results = $this->tweet->where('user_id','=',Auth::user()->id)->get()->toArray();
         $request->session()->put('key', $results);
  
-        return view('mypage',['results'=>$results]);
+        return view('mypage',['tweets'=>$results]);
     }
 
     /*
@@ -317,6 +328,32 @@ class TimelineController extends Controller
         // $records = User::getUserName()->toArray();
 
         return json_encode($records);
+    }
+
+    /*
+    * 動画視聴機能
+    */
+    public function watch_movie(Request $request, string $movie_path){
+        $path = storage_path($movie_path); 
+
+        $file_name = basename($path);
+        $real_path = '/var/www/laravel/public/storage/'.$file_name;
+        $file_size = filesize($real_path);
+        $fp = fopen($real_path, 'rb');
+        $status_code = 200;
+        $headers = [
+            'Content-type' => 'video/mp4',
+            'Accept-Ranges' => 'bytes',
+            'Content-Length' => $file_size
+        ];
+        // $range = $request->header('Range');
+
+        return response()->stream(function() use($fp) {
+
+            fpassthru($fp);
+    
+        }, $status_code, $headers);
+    
     }
 
 

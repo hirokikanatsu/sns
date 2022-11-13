@@ -7,6 +7,7 @@
     <div class='cursor'>
         @if($tweets != 'ツイートがありません')
             @include('tweet_list');
+            <a href="{{route('mail')}}">メール送信機能テスト</a>
             <input type='hidden' value=10 id='count'>
             <div class='t_center mb50' id='no_tweet' style="display:none">表示するツイートがありません</div>
         @else

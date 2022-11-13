@@ -399,6 +399,14 @@ input:hover{color:#aaa; }
     font-size: 30px;
 }
 
+#tweet_image{
+    margin:100px 0 ;
+}
+
+#movie{
+    cursor: pointer;
+}
+
 
 
 

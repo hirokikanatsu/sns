@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Auth;
         <link href="{{ asset('css/style.css') }}" rel="stylesheet">
         <link href="{{ asset('css/base.css') }}" rel="stylesheet">
         <script src="{{ mix('js/app.js') }}"></script>
+        <!-- <script src=“https://js.pusher.com/3.2/pusher.min.js“></script>
+        <script src=“https://cdnjs.cloudflare.com/ajax/libs/push.js/0.0.11/push.min.js”></script> -->
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
         <title>Laravel</title>
 
     </head>
@@ -28,6 +31,7 @@ use Illuminate\Support\Facades\Auth;
             @endif
             <img id='icon' class='ml20' src="{{ asset('img/tibetto.jpg') }}" alt="チベットスナギツネの写真">
             <div id='myname'>{{Auth::user()->name}}</div>
+            <button id='search_users'><a href="{{route('search_users_form')}}">ユーザー検索</a></button>
             <button id='mypage'><a href="{{route('mypage')}}">マイページ</a></button>
             <form action="{{route('logout')}}" method='post'>
                 @csrf

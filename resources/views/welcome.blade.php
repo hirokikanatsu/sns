@@ -24,7 +24,7 @@
             </div>
             
         </div>
-        @include('auth.login_modal');
+        @include('auth.login_modal')
     </body>
     <script src="{{ asset('js/base.js') }}"></script>
 

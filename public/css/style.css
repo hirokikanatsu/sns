@@ -73,6 +73,19 @@
     top:100px;
 }
 
+#search_users{
+    width: 150px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    color:red;
+    border-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 22%;
+    top:100px;
+}
+
 #follow{
     width: 150px;
     height: 50px;
@@ -207,6 +220,18 @@
     position: absolute;
     right: 50px;
     width: 100px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 10px;
+    color:crimson;
+    cursor: pointer;
+}
+
+.back_btn_to_top{
+    position: absolute;
+    right: 50px;
+    width: 200px;
     height: 50px;
     font-weight: bold;
     font-size: 20px;
@@ -406,6 +431,63 @@ input:hover{color:#aaa; }
 #movie{
     cursor: pointer;
 }
+
+#search_form{
+    margin: 50px auto ;
+}
+
+#search_user_name{
+    font-size: 30px;
+    margin-right: 50px;
+}
+
+#search_user_id{
+    font-size: 20px;
+    margin-left: 50px;
+}
+
+.user_info{
+    display: flex;
+    line-height: 50px;
+    justify-content: center;
+    margin:30px 0;
+}
+
+#to_dm{
+    width: 150px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    color:chartreuse;
+    border-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 12%;
+    top:300px;
+}
+
+#chat_form{
+    position: fixed;
+    bottom: 0;
+    width: 90%;
+}
+
+#room{
+    width: 65%;
+    margin: 30px auto;
+    background-color: #F7F6F6;
+    padding: 20px;
+    height: 50%;
+    overflow:auto;
+}
+
+#chat_user_name{
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 30px;
+}
+
 
 
 

@@ -4,10 +4,9 @@
     @if(session('f_msg'))
         <div class='f_msg' id='msg'>{{session('f_msg')}}</div>
     @endif
-    <div class='cursor'>
+    <div class='cursor' id='timeline_space'>
         @if($tweets != 'ツイートがありません')
             @include('tweet_list');
-            <a href="{{route('mail')}}">メール送信機能テスト</a>
             <input type='hidden' value=10 id='count'>
             <div class='t_center mb50' id='no_tweet' style="display:none">表示するツイートがありません</div>
         @else

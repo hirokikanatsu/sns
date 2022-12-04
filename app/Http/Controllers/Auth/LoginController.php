@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Laravel\Socialite\Facades\Socialite;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/login_conf';
+    protected $redirectTo = '/welcome';
     // protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
@@ -72,4 +73,50 @@ class LoginController extends Controller
         
         return  view('Auth.login');
     }
+
+
+    /**
+      * Twitterの認証ページヘユーザーをリダイレクト
+      *
+      * @return \Illuminate\Http\Response
+      */
+      public function redirectToProvider()
+      {
+        return  Socialite::driver('twitter')->redirect();
+      }
+
+      /**
+       * Twitterからユーザー情報を取得(Callback先)
+       *
+       * @return \Illuminate\Http\Response
+       */    
+      public function handleProviderCallback()
+      {
+         try {
+            $twitterUser = Socialite::driver('twitter')->user();
+         } catch (Exception $e) {
+            return redirect('/welcome');
+         }
+
+          if(User::where('email', $twitterUser->getEmail())->exists()){
+             //ツイッターで作成されたユーザーならそのままパスする
+            $user = User::where('email', $twitterUser->getEmail())->first();
+            Auth::login($user);
+            return redirect('/login_success');
+          }else{
+             $user = new User();
+             //ユーザーに必要な情報
+            $user->name = $twitterUser->getName();
+            $user->email = $twitterUser->getEmail();
+            $user->password = md5(Str::uuid());
+            $user->twitter = 1;
+            $user->nickname = $twitterUser->getNickname();
+            $user->save();
+             
+          }
+
+          Auth::login($user);
+          return redirect('/login_success');
+      }
+
 }

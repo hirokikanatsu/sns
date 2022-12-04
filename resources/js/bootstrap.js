@@ -1,4 +1,4 @@
-window._ = require('lodash');
+    window._ = require('lodash');
 
 try {
     window.$ = window.jQuery = require('jquery');
@@ -21,13 +21,32 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from 'laravel-echo';
+import Echo from 'laravel-echo';
 
-// window.Pusher = require('pusher-js');
+window.Pusher = require('pusher-js');
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.MIX_PUSHER_APP_KEY,
+    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    forceTLS: true
+});
+
+// var channel = Echo.channel('send-chat');
+// channel.listen('TaskAdded', function(data) {
+//   alert(JSON.stringify(data));
 // });
+
+window.Echo.channel('send-chat')
+            .listen('TaskAdded',function(data){
+                let send_user = document.getElementById('send_id').value;
+                console.log('received a message');
+                console.log(data['chats']);
+                if(data['chats']['send_user'] == send_user){
+                    let add_chat = "<div class='send' style='text-align: right'><p>" + data['chats']['contents'] + "</p></div>";
+                    $('#room').append(add_chat);
+                }else{
+                    let add_chat = "<div class='receive' style='text-align: left'><p>" + data['chats']['contents'] + "</p></div>";
+                    $('#room').append(add_chat);
+                }
+            });

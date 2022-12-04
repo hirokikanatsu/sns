@@ -33,6 +33,7 @@
                                 <div class="clear-fix"></div>
                             </div>  
                     </div>
+                    <button><a href="{{route('auth/login/twitter')}}">ツイッターログイン</a></button>
                     <div id='close_modal'>閉じる</div>
                 </div>
             </div>
@@ -40,32 +41,3 @@
     </div>
 </div>
 </div>
-
-<!-- <script>
-
-//メールアドレス未入力エラー
-function input_email(){
-    let email = document.getElementById('email').value;
-    if(!email){
-        document.getElementById('email_error').innerHTML='メールアドレスを入力してください';
-    }
-}
-
-//パスワード未入力エラー
-function input_password(){
-    let password = document.getElementById('password').value;
-    if(!password){
-        document.getElementById('password_error').innerHTML='パスワードを入力してください';
-    }
-}
-
-//モーダル非表示：「閉じる」クリック
-let close_modal = document.getElementById('close_modal');
-if(close_modal){
-    close_modal.addEventListener('click',function(e){
-        $('#back_modal').css({'display':'none'});
-        $('#back_modal').toggleClass('back_modal');
-    })
-}
-
-</script> -->

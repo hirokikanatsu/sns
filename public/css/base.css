@@ -185,6 +185,12 @@ label{
     cursor: pointer;
 }
 
+.chat_form{
+    position: fixed;
+    bottom: 0;
+    width: 90%;
+}
+
 
 /* 左から右へのアニメーション */
 /* .test{

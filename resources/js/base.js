@@ -12,33 +12,28 @@ $(document).ready(function(){
 
 if(login_logo){
     login_logo.addEventListener('click',function(e){
-        console.log('aaaaaaaaa');
         e.preventDefault();
         $('#back_modal').css({'display':'block'});
         $('#back_modal').toggleClass('back_modal');
     })
 }
 
-if(login_btn){
-    login_btn.addEventListener('click',function(e){
-        alert('assss');
-        // e.preventDefault();
-    })
-}
 
 //無限スクロール
-$(window).on("scroll", function (){
-    // スクロール位置
-    var document_h = $(document).height();              
-    var window_h = $(window).height() + $(window).scrollTop();    
-    var scroll = (document_h - window_h);
-
-    // 画面最下部にスクロールされている場合
-    if (scroll <= 1) {
-        // ajaxコンテンツ追加処理
-        ajax_add_tweet();
-    }
-});
+if(document.getElementById('timeline_space')){
+    $(window).on("scroll", function (){
+        // スクロール位置
+        var document_h = $(document).height();              
+        var window_h = $(window).height() + $(window).scrollTop();    
+        var scroll = (document_h - window_h);
+    
+        // 画面最下部にスクロールされている場合
+        if (scroll <= 1) {
+            // ajaxコンテンツ追加処理
+            ajax_add_tweet();
+        }
+    });
+}
 
 
 //ツイートバリデーション
@@ -82,12 +77,14 @@ goods.forEach(function(target){
 function inputChange(){
     console.log('Change');
 }
-
-let email = document.getElementById('email').val();
-console.log(email);
-if(email.addEventListener('change',function(){
+if(document.getElementById('email')){
+    let email = document.getElementById('email').val();
     console.log(email);
-}));
+    if(email.addEventListener('change',function(){
+        console.log(email);
+    }));
+}
+
 
     
 
@@ -183,5 +180,56 @@ function ajax_add_tweet(){
     })
 }
 
+
+//チャットの初期表示を最新のところに合わせる
+if(document.getElementById('room')){
+    let room = document.getElementById('room');
+    room.scrollTo(0, room.scrollHeight);
+}
+
+if(document.getElementById('chat_btn_send')){
+    if(document.getElementById('chat_btn_send').addEventListener('click',function(e){
+        send_chat();
+    }));
+}
+
+//チャット送信ボタン押下時
+function send_chat(){
+
+    let send_user = document.getElementById('send_id').value;
+    let receive_user = document.getElementById('receive_id').value;
+    let contents = document.getElementById('contents').value;
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+        }, 
+        type:'POST',
+        url:'/store_chat',
+        dataType:'json',
+        data:{ 'send_user':send_user,
+                'receive_user':receive_user,
+                'contents':contents}
+    }).done(function(data){
+        console.log(data);
+        document.getElementById('contents').value = '';
+    }).fail(function(msg){
+        console.log('失敗');
+    })
+}
+
+// let search_user_name = document.getElementById('search_user');
+// console.log('qqqqq');
+// if(search_user_name){
+//     search_user_name.click(function(e){
+//         e.preventDefault();
+
+//         ajax_show_users_name();
+//     })
+// }
+
+// function ajax_show_users_name(){
+//         console.log('qqqqq');     
+// }
 
 

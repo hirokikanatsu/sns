@@ -28,5 +28,10 @@ class Tweet extends Model
     {
         return $query->notMyself()->where('user_id', Follow::followIds());
     }
+
+    //対象ユーザーのツイートを取得
+    public function get_user_info(int $id){
+        return Tweet::where('user_id',$id)->with('user')->get()->toArray();
+    }
     
 }

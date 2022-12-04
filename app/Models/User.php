@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'twitter',
+        'nickname'
     ];
 
     /**
@@ -44,6 +46,15 @@ class User extends Authenticatable
 
     public function follows(){
         return $this->hasMany('App\Models\Follow','follower_id','id');
+    }
+
+    public function chats(){
+        return $this->hasMany('App\Models\Chat','send_user_id','id');
+    }
+
+    //検索下文字列が含まれるユーザーを取得
+    public function get_relational_users_name($user_name){
+        return User::where('name','like','%'.$user_name.'%')->get()->toArray();
     }
 
     //ユーザー名のみ取得

@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\TimelineController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TwitterLoginController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\GoogleController;
+use App\Events\TaskAdded;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +22,22 @@ use App\Http\Controllers\MailController;
 |
 */
 
+Route::get('/tasks', function () {
 
+    // broadcast(new \App\Events\TaskAdded());
+    $test = ['id' => 1, 'name' => 'メールの確認'];
+    event(new TaskAdded($test));
+
+    return view('welcome');
+    // $test = 'あいうえお';
+
+    // event(new TaskAdded($test));
+});
 
 
 Auth::routes();
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,9 +50,24 @@ Route::group(['middleware' => ['guest']],function(){
     //ログイン
     Route::post('/login_conf',[LoginController::class,'login'])->name('login_conf');
 
+    // Route::get('auth/login/twitter', [TwitterLoginController::class, 'redirectToProvider'])->name('auth/login/twitter');
+
+    // Route::get('auth/twitter/callback',[TwitterLoginController::class, 'handleProviderCallback']);
+
+
+
+    // Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    //     return view('dashboard');
+    // })->name('dashboard');
+    
+    // Route::get('/login/google', [GoogleController::class, 'redirectToGoogle'])->name('login/google');
+    // Route::get('/login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 });
  
+Route::get('auth/login/twitter', [LoginController::class, 'redirectToProvider'])->name('auth/login/twitter');
+
+Route::get('auth/twitter/callback',[LoginController::class, 'handleProviderCallback']);
 
 Route::group(['middleware' => ['auth']],function(){
 
@@ -89,8 +121,24 @@ Route::group(['middleware' => ['auth']],function(){
 
     //動画視聴
     Route::get('/watch_movie/{movie_path}',[TimelineController::class,'watch_movie'])->name('watch_movie');
-});
 
+    //ユーザー検索フォーム
+    Route::get('/search_users_form',[UserController::class,'search_users_form'])->name('search_users_form');
+
+    //ユーザー検索
+    Route::post('/search_users',[UserController::class,'search_users'])->name('search_users');
+
+    //ユーザープロフィール
+    Route::get('/user_profile/{id}',[TimelineController::class,'user_profile'])->name('user_profile');
+
+    //チャットフォーム画面
+    Route::get('dm_form/{id}',[ChatController::class,'dm_form'])->name('dm_form');
+
+    //チャット保存
+    Route::post('store_chat',[ChatController::class,'store_chat'])->name('store_chat');
+
+
+});
 
 
 

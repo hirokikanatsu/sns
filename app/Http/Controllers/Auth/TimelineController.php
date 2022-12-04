@@ -16,6 +16,7 @@ use App\Models\Good;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Ui\Presets\React;
+use App\Events\TaskAdded;
 
 class TimelineController extends Controller
 {
@@ -48,6 +49,7 @@ class TimelineController extends Controller
                 }
             }
         }
+
         return view('Auth.timeline',['tweets' => $tweets]);
     }
 
@@ -181,6 +183,8 @@ class TimelineController extends Controller
             $tweets = $this->tweet->with('user')->where('user_id',Auth::user()->id)->get()->toArray();
             
             return view('mypage',['tweets'=>$tweets]);
+        }elseif($request['back_page'] == 'search_users_form'){
+            return view('search_users_form');
         }else{ //上記以外の全ての「戻る」ボタン
 
             $tweets = Tweet::followingTweets()->paginate(10);
@@ -364,6 +368,12 @@ class TimelineController extends Controller
 
     public function get_all_tweet($user_id){
         $this->tweet->with('user')->where('user_id','!=',$user_id)->get()->toArray();
+    }
+
+    //検索対象ユーザー情報
+    public function user_profile(int $id){
+        $user_infomations =  $this->tweet->get_user_info($id);
+        return view('searched_profile',['tweets'=>$user_infomations]); 
     }
 
 }
